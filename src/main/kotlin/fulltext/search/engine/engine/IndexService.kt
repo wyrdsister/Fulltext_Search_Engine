@@ -34,4 +34,12 @@ class IndexService {
         indexes[id]!!.addDocument(doc)
     }
 
+    fun search(id: String, query: String): List<Index.DocInfo> {
+        if (indexes[id] == null){
+            throw Exception("Can't find index with id=$id")
+        }
+
+        return indexes[id]!!.search(query, 10)
+    }
+
 }
