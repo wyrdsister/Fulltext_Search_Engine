@@ -22,10 +22,6 @@ class Index {
 
     private lateinit var iWriter: IndexWriter
 
-    private lateinit var iSearcher: IndexSearcher
-
-    private lateinit var iReader: IndexReader
-
     constructor(path: Path){
         this.directory = FSDirectory.open(path)
         this.iWriter = IndexWriter(directory, IndexWriterConfig())
@@ -43,21 +39,24 @@ class Index {
     }
 
     fun search(query : String, maxHints: Int) : List<DocInfo> {
-        if (iReader == null)
-            iReader = DirectoryReader.open(directory)
+        val iReader = DirectoryReader.open(directory)
+        iReader.apply {
+            val iSearcher = IndexSearcher(iReader)
 
-        if (iSearcher == null)
-            iSearcher = IndexSearcher(iReader)
+            iSearcher.apply {
+                val queryParser = QueryParser("Content", StandardAnalyzer())
+                val query = queryParser.parse(query)
 
-        val queryParser = QueryParser("Content", StandardAnalyzer())
-        val query = queryParser.parse(query)
+                val docs = iSearcher.search(query, maxHints)
+                val storedFields = iSearcher.storedFields()
 
-        val docs = iSearcher.search(query, maxHints)
-        val storedFields = iSearcher.storedFields()
+                return docs.scoreDocs
+                    .map { storedFields.document(it.doc) }
+                    .map { DocInfo(it.get("Name"), it.get("Author")) }
 
-        return docs.scoreDocs
-            .map { storedFields.document(it.doc) }
-            .map { DocInfo(it.get("Name"), it.get("Author")) }
+            }
+
+        }
     }
 
 

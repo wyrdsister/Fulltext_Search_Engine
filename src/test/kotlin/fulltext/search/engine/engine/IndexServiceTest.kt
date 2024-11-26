@@ -1,27 +1,108 @@
 package fulltext.search.engine.engine
 
+import fulltext.search.engine.rest.entities.Document
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeAll
+import kotlin.test.BeforeTest
 
 class IndexServiceTest {
 
     private val indexService = IndexService()
 
-    @Test
-    fun testCreateIndex() {
-        val id = "test_index"
+    private val id = "test1"
 
+    @BeforeTest
+    fun testCreateIndex(){
         indexService.createIndex(id)
 
-        assert(indexService.getIndex(id) != null)
+        indexService.addDocument(
+            id, Document(
+                "Man’s Search for Meaning", "Viktor E. Frankl",
+                "Psychiatrist Viktor Frankl's memoir has riveted generations of readers with its descriptions of life in Nazi death camps and its lessons for spiritual survival. Based on his own experience and the stories of his patients, Frankl argues that we cannot avoid suffering but we can choose how to cope with it, find meaning in it, and move forward with renewed purpose. At the heart of his theory, known as logotherapy, is a conviction that the primary human drive is not pleasure but the pursuit of what we find meaningful. Man's Search for Meaning has become one of the most influential books in America; it continues to inspire us all to find significance in the very act of living."
+            )
+        )
+        indexService.addDocument(
+            id, Document(
+                "Quiet: The Power of Introverts in a World That Can't Stop Talking", "Susan Cain",
+                "At least one-third of the people we know are introverts. They are the ones who prefer listening to speaking; who innovate and create but dislike self-promotion; who favor working on their own over working in teams. It is to introverts—Rosa Parks, Chopin, Dr. Seuss, Steve Wozniak—that we owe many of the great contributions to society. \n" +
+                        "\n" +
+                        "In Quiet, Susan Cain argues that we dramatically undervalue introverts and shows how much we lose in doing so. She charts the rise of the Extrovert Ideal throughout the twentieth century and explores how deeply it has come to permeate our culture. She also introduces us to successful introverts—from a witty, high-octane public speaker who recharges in solitude after his talks, to a record-breaking salesman who quietly taps into the power of questions. Passionately argued, superbly researched, and filled with indelible stories of real people, Quiet has the power to permanently change how we see introverts and, equally important, how they see themselves.\n" +
+                        "\n" +
+                        "Now with Extra Libris material, including a reader’s guide and bonus content"
+            )
+        )
+        indexService.addDocument(
+            id, Document(
+                "The Body Keeps the Score: Brain, Mind, and Body in the Healing of Trauma", "Bessel van der Kolk",
+                "A pioneering researcher transforms our understanding of trauma and offers a bold new paradigm for healing.\n" +
+                        "\n" +
+                        "Trauma is a fact of life. Veterans and their families deal with the painful aftermath of combat; one in five Americans has been molested; one in four grew up with alcoholics; one in three couples have engaged in physical violence. Dr. Bessel van der Kolk, one of the world's foremost experts on trauma, has spent over three decades working with survivors. In The Body Keeps the Score, he uses recent scientific advances to show how trauma literally reshapes both body and brain, compromising sufferers' capacities for pleasure, engagement, self-control, and trust. He explores innovative treatments—from neurofeedback and meditation to sports, drama, and yoga—that offer new paths to recovery by activating the brain's natural neuroplasticity. Based on Dr. van der Kolk's own research and that of other leading specialists, The Body Keeps the Score exposes the tremendous power of our relationships both to hurt and to heal—and offers new hope for reclaiming lives."
+            )
+        )
     }
 
     @Test
-    fun getIndex() {
+    fun testFindWordInEnglishIndex() {
+        val results = indexService.search(id, "life")
+
+        assertEquals(
+            listOf(
+                Index.DocInfo("Man’s Search for Meaning", "Viktor E. Frankl"),
+                Index.DocInfo(
+                    "The Body Keeps the Score: Brain, Mind, and Body in the Healing of Trauma",
+                    "Bessel van der Kolk"
+                )
+            ),
+            results
+        )
+
     }
 
     @Test
-    fun addDocument() {
+    fun testFindWholePhraseInEnglishIndex() {
+        val results = indexService.search(id, "Trauma is lifes")
+
+        assertEquals(
+            listOf(
+                Index.DocInfo(
+                    "The Body Keeps the Score: Brain, Mind, and Body in the Healing of Trauma",
+                    "Bessel van der Kolk"
+                )
+            ),
+            results
+        )
+
+    }
+
+    @Test
+    fun testFindPartialPhraseInEnglishIndex() {
+        val results = indexService.search(id, "how we see introverts")
+
+        assertEquals(
+            listOf(
+                Index.DocInfo("Quiet: The Power of Introverts in a World That Can't Stop Talking", "Susan Cain")
+            ),
+            results
+        )
+
+    }
+
+    @Test
+    fun testFindWordWithMistakeInEnglishIndex() {
+        val results = indexService.search(id, "lafe")
+
+        assertEquals(
+            listOf(
+                Index.DocInfo("Man’s Search for Meaning", "Viktor E. Frankl"),
+                Index.DocInfo(
+                    "The Body Keeps the Score: Brain, Mind, and Body in the Healing of Trauma",
+                    "Bessel van der Kolk"
+                )
+            ),
+            results
+        )
+
     }
 }

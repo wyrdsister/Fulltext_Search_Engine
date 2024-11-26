@@ -5,7 +5,6 @@ import org.apache.lucene.document.Field
 import org.apache.lucene.document.TextField
 import org.springframework.stereotype.Service
 import java.nio.file.Files
-import java.nio.file.Path
 
 @Service
 class IndexService {
@@ -13,7 +12,7 @@ class IndexService {
     private val indexes = HashMap<String, Index>()
 
     fun createIndex(id: String){
-        val path = Files.createTempDirectory("$id")
+        val path = Files.createTempDirectory(id)
         indexes[id] = Index(path)
     }
 
