@@ -8,6 +8,7 @@ import org.apache.lucene.index.IndexWriter
 import org.apache.lucene.index.IndexWriterConfig
 import org.apache.lucene.index.Term
 import org.apache.lucene.queryparser.classic.QueryParser
+import org.apache.lucene.search.FuzzyQuery
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.PhraseQuery
 import org.apache.lucene.store.Directory
@@ -68,16 +69,18 @@ class Index {
             val iSearcher = IndexSearcher(iReader)
 
             iSearcher.apply {
-                val queryParser = QueryParser("Content", StandardAnalyzer())
-                val query = queryParser.parse(query)
+                //val queryParser = QueryParser("Content", StandardAnalyzer())
+                //val query = queryParser.parse("$query~")
 
-                val docs = iSearcher.search(query, maxHints)
+                val fuzzyQuery = FuzzyQuery(Term("Content", query), 1)
+
+                val docs = iSearcher.search(fuzzyQuery, maxHints)
                 val storedFields = iSearcher.storedFields()
 
                 return docs.scoreDocs
                     .map { storedFields.document(it.doc) }
                     .map { DocInfo(it.get("Name"), it.get("Author")) }
-
+                    .sortedBy { it.name }
             }
 
         }

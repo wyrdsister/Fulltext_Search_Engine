@@ -102,16 +102,14 @@ class IndexServiceTest {
     }
 
     @Test
-    fun testFindWordWithMistakeInEnglishIndex() {
-        val results = indexService.search(id, "lafe")
+    fun testFindWordWith1MistakeInEnglishIndex() {
+        val results = indexService.search(id, "thig")
+
 
         assertEquals(
             listOf(
                 Index.DocInfo("Man’s Search for Meaning", "Viktor E. Frankl"),
-                Index.DocInfo(
-                    "The Body Keeps the Score: Brain, Mind, and Body in the Healing of Trauma",
-                    "Bessel van der Kolk"
-                )
+                Index.DocInfo("Quiet: The Power of Introverts in a World That Can't Stop Talking", "Susan Cain")
             ),
             results
         )
