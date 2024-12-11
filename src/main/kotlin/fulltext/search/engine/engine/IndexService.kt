@@ -11,17 +11,17 @@ class IndexService {
 
     private val indexes = HashMap<String, Index>()
 
-    fun createIndex(id: String){
+    fun createIndex(id: String) {
         val path = Files.createTempDirectory(id)
         indexes[id] = Index(path)
     }
 
-    fun getIndex(id: String) : Index? {
+    fun getIndex(id: String): Index? {
         return indexes[id]
     }
 
-    fun addDocument(id: String, input: Document){
-        if (indexes[id] == null){
+    fun addDocument(id: String, input: Document) {
+        if (indexes[id] == null) {
             return
         }
 
@@ -34,11 +34,14 @@ class IndexService {
     }
 
     fun search(id: String, query: String): List<Index.DocInfo> {
-        if (indexes[id] == null){
+        if (indexes[id] == null) {
             throw Exception("Can't find index with id=$id")
         }
 
-        return indexes[id]!!.search(query, 10)
+        return if (query.isPhrase()) indexes[id]!!.searchPhrase(query, 10, 5)
+        else indexes[id]!!.search(query, 10)
     }
 
 }
+
+fun String.isPhrase() = this.split(" ").count() > 1

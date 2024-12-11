@@ -20,7 +20,7 @@ class IndexServiceTest {
         indexService.addDocument(
             id, Document(
                 "Man’s Search for Meaning", "Viktor E. Frankl",
-                "Psychiatrist Viktor Frankl's memoir has riveted generations of readers with its descriptions of life in Nazi death camps and its lessons for spiritual survival. Based on his own experience and the stories of his patients, Frankl argues that we cannot avoid suffering but we can choose how to cope with it, find meaning in it, and move forward with renewed purpose. At the heart of his theory, known as logotherapy, is a conviction that the primary human drive is not pleasure but the pursuit of what we find meaningful. Man's Search for Meaning has become one of the most influential books in America; it continues to inspire us all to find significance in the very act of living."
+                "Psychiatrist Viktor Frankl's memoir has riveted generations of readers with its descriptions of life in Nazi death camps and its lessons for spiritual survival. Based on his own experience and the stories of his patients, Frankl argues that we cannot avoid suffering but we can choose how to cope with it, find meaning in it, and move forward with renewed purpose. At the heart of his theory, known as logotherapy, is a conviction that the primary human drive is not pleasure but the pursuit of what we find meaningful. Man's Search for Meaning has become one of the most influential books in America; it continues to inspire us all to find significance in the very act of living. The life is so beautiful thing."
             )
         )
         indexService.addDocument(
@@ -29,8 +29,7 @@ class IndexServiceTest {
                 "At least one-third of the people we know are introverts. They are the ones who prefer listening to speaking; who innovate and create but dislike self-promotion; who favor working on their own over working in teams. It is to introverts—Rosa Parks, Chopin, Dr. Seuss, Steve Wozniak—that we owe many of the great contributions to society. \n" +
                         "\n" +
                         "In Quiet, Susan Cain argues that we dramatically undervalue introverts and shows how much we lose in doing so. She charts the rise of the Extrovert Ideal throughout the twentieth century and explores how deeply it has come to permeate our culture. She also introduces us to successful introverts—from a witty, high-octane public speaker who recharges in solitude after his talks, to a record-breaking salesman who quietly taps into the power of questions. Passionately argued, superbly researched, and filled with indelible stories of real people, Quiet has the power to permanently change how we see introverts and, equally important, how they see themselves.\n" +
-                        "\n" +
-                        "Now with Extra Libris material, including a reader’s guide and bonus content"
+                        "Now with Extra Libris material, including a reader’s guide and bonus content. The life is so awful thing."
             )
         )
         indexService.addDocument(
@@ -50,6 +49,7 @@ class IndexServiceTest {
         assertEquals(
             listOf(
                 Index.DocInfo("Man’s Search for Meaning", "Viktor E. Frankl"),
+                Index.DocInfo("Quiet: The Power of Introverts in a World That Can't Stop Talking", "Susan Cain"),
                 Index.DocInfo(
                     "The Body Keeps the Score: Brain, Mind, and Body in the Healing of Trauma",
                     "Bessel van der Kolk"
@@ -62,7 +62,7 @@ class IndexServiceTest {
 
     @Test
     fun testFindWholePhraseInEnglishIndex() {
-        val results = indexService.search(id, "Trauma is lifes")
+        val results = indexService.search(id, "fact of life")
 
         assertEquals(
             listOf(
@@ -86,7 +86,19 @@ class IndexServiceTest {
             ),
             results
         )
+    }
 
+    @Test
+    fun testFindPartialPhraseIn2EnglishIndex() {
+        val results = indexService.search(id, "Life is thing")
+
+        assertEquals(
+            listOf(
+                Index.DocInfo("Man’s Search for Meaning", "Viktor E. Frankl"),
+                Index.DocInfo("Quiet: The Power of Introverts in a World That Can't Stop Talking", "Susan Cain")
+            ),
+            results
+        )
     }
 
     @Test
