@@ -33,8 +33,16 @@ class IndexServiceTest {
                 "At least one-third of the people we know are introverts. They are the ones who prefer listening to speaking; who innovate and create but dislike self-promotion; who favor working on their own over working in teams. It is to introverts—Rosa Parks, Chopin, Dr. Seuss, Steve Wozniak—that we owe many of the great contributions to society. \n" +
                         "\n" +
                         "In Quiet, Susan Cain argues that we dramatically undervalue introverts and shows how much we lose in doing so. She charts the rise of the Extrovert Ideal throughout the twentieth century and explores how deeply it has come to permeate our culture. She also introduces us to successful introverts—from a witty, high-octane public speaker who recharges in solitude after his talks, to a record-breaking salesman who quietly taps into the power of questions. Passionately argued, superbly researched, and filled with indelible stories of real people, Quiet has the power to permanently change how we see introverts and, equally important, how they see themselves.\n" +
-                        "Now with Extra Libris material, including a reader’s guide and bonus content. The life is so awful thing.",
                 0
+            )
+        )
+
+        indexService.addDocument(
+            id, Document(
+                "2D",
+                "Quiet: The Power of Introverts in a World That Can't Stop Talking", "Susan Cain",
+                "Now with Extra Libris material, including a reader’s guide and bonus content. The life is so awful thing.",
+                1
             )
         )
         indexService.addDocument(
@@ -56,7 +64,7 @@ class IndexServiceTest {
         assertEquals(
             listOf(
                 DocInfo("1A", "Man’s Search for Meaning", "Viktor E. Frankl", 0),
-                DocInfo("2B","Quiet: The Power of Introverts in a World That Can't Stop Talking", "Susan Cain", 0),
+                DocInfo("2D","Quiet: The Power of Introverts in a World That Can't Stop Talking", "Susan Cain", 1),
                 DocInfo( "3C",
                     "The Body Keeps the Score: Brain, Mind, and Body in the Healing of Trauma",
                     "Bessel van der Kolk",
@@ -88,7 +96,7 @@ class IndexServiceTest {
 
     @Test
     fun testFindPartialPhraseInEnglishIndex() {
-        val results = indexService.search(id, "how we see introverts")
+        val results = indexService.search(id, "we know are introverts")
 
         assertEquals(
             listOf(
@@ -105,7 +113,7 @@ class IndexServiceTest {
         assertEquals(
             listOf(
                 DocInfo("1A", "Man’s Search for Meaning", "Viktor E. Frankl", 0),
-                DocInfo("2B","Quiet: The Power of Introverts in a World That Can't Stop Talking", "Susan Cain", 0),
+                DocInfo("2D", "Quiet: The Power of Introverts in a World That Can't Stop Talking", "Susan Cain", 1),
             ),
             results.documents
         )
@@ -119,10 +127,12 @@ class IndexServiceTest {
         assertEquals(
             listOf(
                 DocInfo("1A", "Man’s Search for Meaning", "Viktor E. Frankl", 0),
-                DocInfo("2B","Quiet: The Power of Introverts in a World That Can't Stop Talking", "Susan Cain", 0),
+                DocInfo("2D","Quiet: The Power of Introverts in a World That Can't Stop Talking", "Susan Cain", 1),
             ),
             results.documents
         )
 
     }
+
+
 }

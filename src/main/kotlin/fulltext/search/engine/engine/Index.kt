@@ -45,6 +45,8 @@ class Index {
         iWriter.commit()
     }
 
+
+
     fun searchPhrase(phrase: String, maxHints: Int, accuracy: Int): SearchResult {
         val iReader = DirectoryReader.open(directory)
         iReader.apply {

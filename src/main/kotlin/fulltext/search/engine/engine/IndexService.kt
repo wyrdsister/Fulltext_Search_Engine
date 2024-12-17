@@ -3,8 +3,6 @@ package fulltext.search.engine.engine
 import fulltext.search.engine.entities.Document
 import fulltext.search.engine.entities.SearchResult
 import org.apache.lucene.document.Field
-import org.apache.lucene.document.FloatField
-import org.apache.lucene.document.IntField
 import org.apache.lucene.document.TextField
 import org.springframework.stereotype.Service
 import java.nio.file.Files
