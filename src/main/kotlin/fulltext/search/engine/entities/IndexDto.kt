@@ -1,4 +1,4 @@
-package fulltext.search.engine.rest.entities
+package fulltext.search.engine.entities
 
 import kotlinx.serialization.Serializable
 

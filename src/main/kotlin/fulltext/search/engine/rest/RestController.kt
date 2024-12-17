@@ -1,7 +1,7 @@
 package fulltext.search.engine.rest
 
 import fulltext.search.engine.engine.IndexService
-import fulltext.search.engine.rest.entities.*
+import fulltext.search.engine.entities.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -23,12 +23,12 @@ class RestController(
     }
 
     @PostMapping("/index/{id}")
-    fun addDocument(@RequestBody doc: Document, @PathVariable id: String){
-        indexService.addDocument(id, doc)
+    fun addDocument(@RequestBody doc: Document, @PathVariable id: String): String {
+        return indexService.addDocument(id, doc)
     }
 
     @GetMapping("index/{id}")
-    fun searchText(searchQuery: SearchQuery, @PathVariable id: String) : List<SearchResult> {
-        return indexService.search(id, searchQuery.text).map { SearchResult(it.name, it.author) }
+    fun searchText(searchQuery: SearchQuery, @PathVariable id: String) : SearchResult {
+        return indexService.search(id, searchQuery.text)
     }
 }
