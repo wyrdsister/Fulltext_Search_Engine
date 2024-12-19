@@ -3,6 +3,7 @@ package fulltext.search.engine.engine
 import fulltext.search.engine.entities.Document
 import fulltext.search.engine.entities.SearchResult
 import org.apache.lucene.document.Field
+import org.apache.lucene.document.IntField
 import org.apache.lucene.document.TextField
 import org.springframework.stereotype.Service
 import java.nio.file.Files
@@ -33,7 +34,7 @@ class IndexService {
         doc.add(Field("Name", input.name, TextField.TYPE_STORED))
         doc.add(Field("Author", input.author, TextField.TYPE_STORED))
         doc.add(Field("Content", input.content, TextField.TYPE_NOT_STORED))
-        doc.add(Field("Page", input.page.toString(), TextField.TYPE_STORED))
+        doc.add(IntField("Page", input.page, Field.Store.YES))
 
         indexes[id]!!.addDocument(doc)
         return docId
@@ -44,7 +45,7 @@ class IndexService {
             throw Exception("Can't find index with id=$id")
         }
 
-        return if (query.isPhrase()) indexes[id]!!.searchPhrase(query, 10, 5)
+        return if (query.isPhrase()) indexes[id]!!.searchPhrase(query, 10, 2)
         else indexes[id]!!.search(query, 10)
     }
 

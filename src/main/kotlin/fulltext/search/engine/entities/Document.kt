@@ -8,5 +8,5 @@ data class Document(
     val name: String,
     val author: String,
     val content: String,
-    val page: Int? = -1
+    val page: Int = -1
 )
