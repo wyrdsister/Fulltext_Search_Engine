@@ -28,7 +28,7 @@ class RestController(
     }
 
     @GetMapping("index/{id}")
-    fun searchText(searchQuery: SearchQuery, @PathVariable id: String) : SearchResult {
+    fun searchText(@RequestBody searchQuery: SearchQuery, @PathVariable id: String) : SearchResult {
         return indexService.search(id, searchQuery.text)
     }
 }
